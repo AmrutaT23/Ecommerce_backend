@@ -1,4 +1,4 @@
-app.set("trust proxy", 1);
+
 
 const multer = require("multer");
 const path = require("path");
@@ -9,10 +9,10 @@ const bcrypt = require("bcryptjs");
 const session = require("express-session");
 
 const app = express();
-
+app.set("trust proxy", 1);
 // middleware
 app.use(cors({
-  origin: "https://ecommerce-frontend-nu-inky.vercel.app",
+  origin: "https://ecommerce-backend-zi3a.onrender.com",
   credentials: true
 }));
 
@@ -27,12 +27,12 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: true,          
-    sameSite: "none",
-    secure: false,
-    maxAge: 1000 * 60 * 60 * 2,
+    secure: process.env.NODE_ENV === "production", // true on Vercel
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    maxAge: 1000 * 60 * 60 * 2, // 2 hours
   }
 }));
+
 
 
 function isAdmin(req, res, next) {
@@ -693,7 +693,7 @@ app.put(
             if (uploadType === "device" && req.files?.length > 0) {
               imageData = req.files.map((file, index) => [
                 productId,
-                `/uploads/${file.filename}`,
+                `/upload/${file.filename}`,
                 index == primaryIndex ? 1 : 0
               ]);
             }
