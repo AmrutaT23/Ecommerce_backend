@@ -12,7 +12,7 @@ const app = express();
 app.set("trust proxy", 1);
 // middleware
 app.use(cors({
-  origin: "https://ecommerce-backend-zi3a.onrender.com",
+  origin: "https://ecommerce-frontend-nu-inky.vercel.app",
   credentials: true
 }));
 
