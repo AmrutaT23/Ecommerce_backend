@@ -1,3 +1,4 @@
+app.set("trust proxy", 1);
 
 const multer = require("multer");
 const path = require("path");
@@ -11,7 +12,7 @@ const app = express();
 
 // middleware
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: "https://ecommerce-frontend-nu-inky.vercel.app",
   credentials: true
 }));
 
@@ -26,6 +27,8 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
+    secure: true,          
+    sameSite: "none",
     secure: false,
     maxAge: 1000 * 60 * 60 * 2,
   }
@@ -350,7 +353,7 @@ app.post("/profile/upload", upload.single("image"), (req, res) => {
     return res.status(400).json({ message: "No image uploaded" });
   }
 
-  const imageUrl = `http://localhost:5000/upload/${req.file.filename}`;
+  const imageUrl = `/upload/${req.file.filename}`;
 
   db.query(
     "UPDATE users SET profile_image = ? WHERE id = ?",
